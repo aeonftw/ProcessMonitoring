@@ -5,9 +5,10 @@ public class Program
     public static async Task Main()
     {
         var logger = new FileProcessLogger();
-        var systemconsole = new SystemConsole();
-        var userInput = new ConsoleUserInputHandler(systemconsole);
-        var monitor = new ProcessMonitor(logger);
+        var systemConsole = new SystemConsole();
+        var userInput = new ConsoleUserInputHandler(systemConsole);
+        var processProvider = new ProcessProvider();
+        var monitor = new ProcessMonitor(logger,processProvider);
 
         var processName = userInput.GetProcessName();
         var maxLifetime = userInput.GetMaxLifetime();

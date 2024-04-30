@@ -9,11 +9,14 @@ namespace ProcessMonitoring
     public class ProcessMonitor : IProcessMonitor
     {
         private readonly IProcessLogger _logger;
+        private readonly IProcessProvider _processProvider;
 
-        public ProcessMonitor(IProcessLogger logger)
+        public ProcessMonitor(IProcessLogger logger, IProcessProvider processProvider)
         {
             _logger = logger;
+            _processProvider = processProvider;
         }
+        
 
         public async Task MonitorAsync(string processName, int maxLifetime, int frequency)
         {
@@ -32,7 +35,7 @@ namespace ProcessMonitoring
             {
                 while (!cts.Token.IsCancellationRequested)
                 {
-                    var processes = Process.GetProcessesByName(processName);
+                    var processes = _processProvider.GetProcessesByName(processName);
                     if (processes.Length == 0)
                     {
                         Console.WriteLine($"Process {processName} is not running, continuing monitoring.");

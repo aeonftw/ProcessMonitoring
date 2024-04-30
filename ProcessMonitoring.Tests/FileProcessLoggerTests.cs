@@ -1,3 +1,5 @@
+using Moq;
+
 namespace ProcessMonitoring.Tests;
 
 using NUnit.Framework;
@@ -61,8 +63,9 @@ public class FileProcessLoggerTests
         Assert.IsTrue(File.Exists(expectedFilePath), "Log file should exist at: " + expectedFilePath);
     }
 
-
-
+  
+  
+   
     [TearDown]
     public void TearDown()
     {
