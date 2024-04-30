@@ -1,13 +1,25 @@
-﻿using System;
+﻿
 using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
-using System.IO;
 
-class ProcessMonitor
+using Microsoft.Extensions.Configuration;
+
+class ProcessMonitoring
 {
+    private static IConfiguration Configuration { get; set; }
+
     static async Task Main()
     {
+         
+        string workingDirectory = Environment.CurrentDirectory;
+        var jsonpath = $"{Directory.GetParent(workingDirectory).Parent.Parent.FullName}/appsettings.json";
+        var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile( jsonpath,optional: false, reloadOnChange: true);
+
+        Configuration = builder.Build();
+        string logFilePath = Configuration["LogFilePath"];
+        
+
         Console.Write("Enter the process name: ");
         string processName = Console.ReadLine();
 
@@ -62,7 +74,7 @@ class ProcessMonitor
                         {
                             Console.WriteLine($"Monitoring {processDetails}: running for {runtime.TotalMinutes} minutes, killing now.");
                             process.Kill();
-                            Log($"{DateTime.Now}: Killed {processDetails} running for {runtime.TotalMinutes} minutes.");
+                            Log($"{DateTime.Now}: Killed {processDetails} running for {runtime.TotalMinutes} minutes.", logFilePath);
                         }
                         else
                         {
@@ -88,10 +100,9 @@ class ProcessMonitor
         }
     }
 
-
-    private static void Log(string message)
+    private static void Log(string message, string filePath)
     {
         Console.WriteLine(message);
-        File.AppendAllText("C:/Users/cionc/OneDrive/Desktop/C# Automation/ProcessMonitor/ProcessMonitoring/Logs/log.txt", message + Environment.NewLine);
+        File.AppendAllText(filePath, message + Environment.NewLine);
     }
 }
