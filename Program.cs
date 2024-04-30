@@ -7,17 +7,20 @@ class ProcessMonitoring
 {
     private static IConfiguration Configuration { get; set; }
 
+   
     static async Task Main()
     {
-         
-        string workingDirectory = Environment.CurrentDirectory;
-        var jsonpath = $"{Directory.GetParent(workingDirectory).Parent.Parent.FullName}/appsettings.json";
+        var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        var projectRoot = Path.GetFullPath(Path.Combine(baseDirectory, @"..\..\..")); 
+        
+       
+        var jsonpath = $"{projectRoot}/appsettings.json";
         var builder = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile( jsonpath,optional: false, reloadOnChange: true);
 
         Configuration = builder.Build();
-        string logFilePath = Configuration["LogFilePath"];
+        var logFilePath = Path.Combine(projectRoot, "Logs", "log.txt");
         
 
         Console.Write("Enter the process name: ");
@@ -99,10 +102,24 @@ class ProcessMonitoring
             cts.Dispose();
         }
     }
+    
+    private static void EnsureDirectoryExists(string filePath)
+    {
+        var directory = Path.GetDirectoryName(filePath);
+        if (!Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+    }
 
     private static void Log(string message, string filePath)
     {
+        EnsureDirectoryExists(filePath);
         Console.WriteLine(message);
         File.AppendAllText(filePath, message + Environment.NewLine);
     }
+    
+    
+    
+    
 }
