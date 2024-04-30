@@ -5,7 +5,8 @@ public class Program
     public static async Task Main()
     {
         var logger = new FileProcessLogger();
-        var userInput = new ConsoleUserInputHandler();
+        var systemconsole = new SystemConsole();
+        var userInput = new ConsoleUserInputHandler(systemconsole);
         var monitor = new ProcessMonitor(logger);
 
         var processName = userInput.GetProcessName();

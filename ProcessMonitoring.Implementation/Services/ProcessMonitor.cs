@@ -45,11 +45,11 @@ namespace ProcessMonitoring
                             var runtime = DateTime.Now - process.StartTime;
                             var timeLeft = maxLifetime - (int)runtime.TotalMinutes;
                             var processDetails = $"{process.ProcessName} ({process.MainWindowTitle})";
-
+                            
                             if (timeLeft <= 0)
                             {
                                 Console.WriteLine(
-                                    $"Monitoring {processDetails}: running for {runtime.TotalMinutes} minutes, stopping now.");
+                                    $"Monitoring {processDetails}: running for {runtime.TotalMinutes} minute, stopping now.");
                                 process.Kill();
                                 _logger.Log(
                                     $"{DateTime.Now}: Stopped {processDetails} running for {runtime.TotalMinutes} minutes.",
