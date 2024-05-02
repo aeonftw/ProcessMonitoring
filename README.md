@@ -28,7 +28,7 @@ Implementations:
 
 ## Setup
 
-1. Clone the repository: git clone https://github.com/aeonftw/process-monitoring.git
+1. Clone the repository: git clone https://github.com/aeonftw/ProcessMonitoring
 2. Navigate to the project directory: cd process-monitoring
 4. Build the project (ensure you have .NET SDK installed): dotnet build
 5. Run the application: dotnet run
